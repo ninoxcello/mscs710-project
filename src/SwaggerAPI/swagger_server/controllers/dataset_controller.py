@@ -50,8 +50,8 @@ def dataset_graph_correlation_correlation_type_post(correlationType):  # noqa: E
 
     1. Spearman, 2. Pearson, 3. Kendall # noqa: E501
 
-    :param correlationType: information
-    :type correlationType: str
+    :param correlationType: Must be a number equal to 1, 2, or 3
+    :type correlationType: int
 
     :rtype: InlineImage
     """
@@ -63,8 +63,8 @@ def dataset_graph_selection_graph_selection_post(graphSelection):  # noqa: E501
 
     1. Trend Curve, 2. Candlestick, 3. Correlation Map # noqa: E501
 
-    :param graphSelection: Must be a value equal to 1, 2, or 3
-    :type graphSelection: str
+    :param graphSelection: Must be a number equal to 1, 2, or 3
+    :type graphSelection: int
 
     :rtype: ApiResponse
     """
@@ -76,7 +76,7 @@ def dataset_model_type_model_type_post(modelType):  # noqa: E501
 
     1. Linear Regression, 2. Support Vector Regression, 3. Multilayer Perceptron # noqa: E501
 
-    :param modelType: Should be a number equal to 1, 2, or 3
+    :param modelType: Must be a number equal to 1, 2, or 3
     :type modelType: int
 
     :rtype: ApiResponse
@@ -89,8 +89,8 @@ def dataset_operation_type_operation_type_post(operationType):  # noqa: E501
 
     1. Train, 2. Test, 3. Predict # noqa: E501
 
-    :param operationType: information
-    :type operationType: str
+    :param operationType: Must be a number equal to 1, 2, or 3
+    :type operationType: int
 
     :rtype: ApiResponse
     """
