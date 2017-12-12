@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "This is an Itty Bitty Money server.  \n"
-  version: "1.0.1"
+  version: "1.0.2"
   title: "Money Rest Client"
 host: "virtserver.swaggerhub.com"
 basePath: "/mmaffa/MoneyREST/1.0.0"
@@ -13,6 +13,140 @@ schemes:
 - "https"
 - "http"
 paths:
+  /dataset/currencySelection/{currencyName}:
+    post:
+      tags:
+      - "dataset"
+      summary: "Selects a specific currency type"
+      description: "The currency type should be either bitcoin, bitconnect, dash,\
+        \ ethereum, iota, litecoin, monero, nem, neo, numeraire, omisego, qtum, ripple,\
+        \ stratis, or waves"
+      operationId: "dataset_currency_selection_currency_name_post"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "currencyName"
+        in: "path"
+        description: "Should be equal to either bitcoin, bitconnect, dash, ethereum,\
+          \ iota, litecoin, monero, nem, neo, numeraire, omisego, qtum, ripple, stratis,\
+          \ or waves"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successfully returned json"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
+  /dataset/train/{currencyName}:
+    post:
+      tags:
+      - "dataset"
+      summary: "Trains based on the currency selected"
+      description: "Should be either bitcoin, bitconnect, dash, ethereum, iota, litecoin,\
+        \ monero, nem, neo, numeraire, omisego, qtum, ripple, stratis, or waves"
+      operationId: "dataset_train_currency_name_post"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "currencyName"
+        in: "path"
+        description: "Should be equal to either bitcoin, bitconnect, dash, ethereum,\
+          \ iota, litecoin, monero, nem, neo, numeraire, omisego, qtum, ripple, stratis,\
+          \ or waves"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successfully returned json"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
+  /dataset/modelType/{modelType}:
+    post:
+      tags:
+      - "dataset"
+      summary: "Selects a model type"
+      description: "1. Linear Regression, 2. Support Vector Regression, 3. Multilayer\
+        \ Perceptron"
+      operationId: "dataset_model_type_model_type_post"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "modelType"
+        in: "path"
+        description: "Should be a number equal to 1, 2, or 3"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "successfully returned json"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
+  /dataset/operationType/{operationType}:
+    post:
+      tags:
+      - "dataset"
+      summary: "Selects what operation to do, either training, testing, or prediction"
+      description: "1. Train, 2. Test, 3. Predict"
+      operationId: "dataset_operation_type_operation_type_post"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "operationType"
+        in: "path"
+        description: "information"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successfully returned json"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
+  /dataset/graphSelection/{graphSelection}:
+    post:
+      tags:
+      - "dataset"
+      summary: "Selects a graph type"
+      description: "1. Trend Curve, 2. Candlestick, 3. Correlation Map"
+      operationId: "dataset_graph_selection_graph_selection_post"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "graphSelection"
+        in: "path"
+        description: "Must be a value equal to 1, 2, or 3"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successfully returned json"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
+  /dataset/graphCorrelation/{correlationType}:
+    post:
+      tags:
+      - "dataset"
+      summary: "Returns a graph utilizing the selected correlation type"
+      description: "1. Spearman, 2. Pearson, 3. Kendall"
+      operationId: "dataset_graph_correlation_correlation_type_post"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "correlationType"
+        in: "path"
+        description: "information"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successfully returned json"
+          schema:
+            $ref: "#/definitions/InlineImage"
+      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
   /dataset/getTable/{tableName}:
     post:
       tags:
@@ -36,143 +170,6 @@ paths:
           schema:
             $ref: "#/definitions/Table"
       x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
-  /dataset/getGraph/{graphdata}:
-    post:
-      tags:
-      - "dataset"
-      summary: "Unsupported Method"
-      description: "Sends data about what the graph should show and returns with an\
-        \ image of the graph"
-      operationId: "dataset_get_graph_graphdata_post"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "graphdata"
-        in: "path"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successfully returned json"
-          schema:
-            $ref: "#/definitions/inline_response_200"
-      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
-  /dataset/getGraphOpenClose/{currencyName}:
-    post:
-      tags:
-      - "dataset"
-      summary: "Produces a graph with a specific currency's opening and closing values"
-      description: "Sends data about what the graph should show and returns with an\
-        \ image of the graph"
-      operationId: "dataset_get_graph_open_close_currency_name_post"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "currencyName"
-        in: "path"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successfully returned json"
-          schema:
-            $ref: "#/definitions/InlineImage"
-      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
-  /dataset/getGraphOpenCloseHighLow/{currencyName}:
-    post:
-      tags:
-      - "dataset"
-      summary: "Produces a graph with a specific currency's opening, closing, high,\
-        \ and low values."
-      description: "Sends data about what the graph should show and returns with an\
-        \ image of the graph"
-      operationId: "dataset_get_graph_open_close_high_low_currency_name_post"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "currencyName"
-        in: "path"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successfully returned json"
-          schema:
-            $ref: "#/definitions/InlineImage"
-      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
-  /dataset/getGraphCloseAllTime:
-    get:
-      tags:
-      - "dataset"
-      summary: "Returns a graph of all currencies closing values for all days we have\
-        \ data of"
-      description: "Sends data about what the graph should show and returns with an\
-        \ image of the graph"
-      operationId: "dataset_get_graph_close_all_time_get"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        200:
-          description: "successfully returned json"
-          schema:
-            $ref: "#/definitions/InlineImage"
-      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
-  /dataset/getGraphCloseOneYear:
-    get:
-      tags:
-      - "dataset"
-      summary: "Returns a graph of all currencies closing values for one year"
-      description: "Sends data about what the graph should show and returns with an\
-        \ image of the graph"
-      operationId: "dataset_get_graph_close_one_year_get"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        200:
-          description: "successfully returned json"
-          schema:
-            $ref: "#/definitions/InlineImage"
-      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
-  /dataset/getCandlestickGraph/{currencyName}:
-    post:
-      tags:
-      - "dataset"
-      summary: "Returns a candlestick graph of the specified currency"
-      description: "Sends data about what the graph should show and returns with an\
-        \ image of the graph"
-      operationId: "dataset_get_candlestick_graph_currency_name_post"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "currencyName"
-        in: "path"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successfully returned json"
-          schema:
-            $ref: "#/definitions/InlineImage"
-      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
-  /dataset/getCryptocurrencyCorrelationGraph:
-    get:
-      tags:
-      - "dataset"
-      summary: "Send specification about what data to graph"
-      description: "Sends data about what the graph should show and returns with an\
-        \ image of the graph"
-      operationId: "dataset_get_cryptocurrency_correlation_graph_get"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        200:
-          description: "successfully returned json"
-          schema:
-            $ref: "#/definitions/InlineImage"
-      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
   /dataset/getStats:
     get:
       tags:
@@ -188,7 +185,7 @@ paths:
         200:
           description: "Successfully returned json"
           schema:
-            $ref: "#/definitions/inline_response_200_1"
+            $ref: "#/definitions/inline_response_200"
         400:
           description: "Error 400: Unable to produce JSON"
       x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
@@ -205,17 +202,6 @@ securityDefinitions:
     name: "api_key"
     in: "header"
 definitions:
-  CurrencyDateInfo:
-    type: "object"
-    properties:
-      currencyName:
-        type: "string"
-      newestDate:
-        type: "string"
-      oldestDate:
-        type: "string"
-    xml:
-      name: "Order"
   Table:
     type: "object"
     properties:
@@ -244,13 +230,11 @@ definitions:
         type: "string"
       message:
         type: "string"
-  inline_response_200:
-    properties:
-      imageurl:
-        type: "string"
     example:
-      imageurl: "imageurl"
-  inline_response_200_1:
+      code: 0
+      type: "type"
+      message: "message"
+  inline_response_200:
     properties:
       count:
         type: "number"
