@@ -1,0 +1,279 @@
+---
+swagger: "2.0"
+info:
+  description: "This is an Itty Bitty Money server.  \n"
+  version: "1.0.1"
+  title: "Money Rest Client"
+host: "virtserver.swaggerhub.com"
+basePath: "/mmaffa/MoneyREST/1.0.0"
+tags:
+- name: "dataset"
+  description: "Dataset Operations"
+schemes:
+- "https"
+- "http"
+paths:
+  /dataset/getTable/{tableName}:
+    post:
+      tags:
+      - "dataset"
+      summary: "Returns the specified table"
+      description: "Returns the HTML Representation of the table."
+      operationId: "dataset_get_table_table_name_post"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tableName"
+        in: "path"
+        description: "Should be equal to either bitcoin, bitconnect, dash, ethereum,\
+          \ iota, litecoin, monero, nem, neo, numeraire, omisego, qtum, ripple, stratis,\
+          \ or waves"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successfully returned json"
+          schema:
+            $ref: "#/definitions/Table"
+      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
+  /dataset/getGraph/{graphdata}:
+    post:
+      tags:
+      - "dataset"
+      summary: "Unsupported Method"
+      description: "Sends data about what the graph should show and returns with an\
+        \ image of the graph"
+      operationId: "dataset_get_graph_graphdata_post"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "graphdata"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successfully returned json"
+          schema:
+            $ref: "#/definitions/inline_response_200"
+      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
+  /dataset/getGraphOpenClose/{currencyName}:
+    post:
+      tags:
+      - "dataset"
+      summary: "Produces a graph with a specific currency's opening and closing values"
+      description: "Sends data about what the graph should show and returns with an\
+        \ image of the graph"
+      operationId: "dataset_get_graph_open_close_currency_name_post"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "currencyName"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successfully returned json"
+          schema:
+            $ref: "#/definitions/InlineImage"
+      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
+  /dataset/getGraphOpenCloseHighLow/{currencyName}:
+    post:
+      tags:
+      - "dataset"
+      summary: "Produces a graph with a specific currency's opening, closing, high,\
+        \ and low values."
+      description: "Sends data about what the graph should show and returns with an\
+        \ image of the graph"
+      operationId: "dataset_get_graph_open_close_high_low_currency_name_post"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "currencyName"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successfully returned json"
+          schema:
+            $ref: "#/definitions/InlineImage"
+      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
+  /dataset/getGraphCloseAllTime:
+    get:
+      tags:
+      - "dataset"
+      summary: "Returns a graph of all currencies closing values for all days we have\
+        \ data of"
+      description: "Sends data about what the graph should show and returns with an\
+        \ image of the graph"
+      operationId: "dataset_get_graph_close_all_time_get"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successfully returned json"
+          schema:
+            $ref: "#/definitions/InlineImage"
+      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
+  /dataset/getGraphCloseOneYear:
+    get:
+      tags:
+      - "dataset"
+      summary: "Returns a graph of all currencies closing values for one year"
+      description: "Sends data about what the graph should show and returns with an\
+        \ image of the graph"
+      operationId: "dataset_get_graph_close_one_year_get"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successfully returned json"
+          schema:
+            $ref: "#/definitions/InlineImage"
+      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
+  /dataset/getCandlestickGraph/{currencyName}:
+    post:
+      tags:
+      - "dataset"
+      summary: "Returns a candlestick graph of the specified currency"
+      description: "Sends data about what the graph should show and returns with an\
+        \ image of the graph"
+      operationId: "dataset_get_candlestick_graph_currency_name_post"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "currencyName"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successfully returned json"
+          schema:
+            $ref: "#/definitions/InlineImage"
+      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
+  /dataset/getCryptocurrencyCorrelationGraph:
+    get:
+      tags:
+      - "dataset"
+      summary: "Send specification about what data to graph"
+      description: "Sends data about what the graph should show and returns with an\
+        \ image of the graph"
+      operationId: "dataset_get_cryptocurrency_correlation_graph_get"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successfully returned json"
+          schema:
+            $ref: "#/definitions/InlineImage"
+      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
+  /dataset/getStats:
+    get:
+      tags:
+      - "dataset"
+      summary: "Get Statistics for the Dataset"
+      description: "Returns values of count, mean, median, mode, min, max, standard\
+        \ deviation (std) for the dataset"
+      operationId: "dataset_get_stats_get"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "Successfully returned json"
+          schema:
+            $ref: "#/definitions/inline_response_200_1"
+        400:
+          description: "Error 400: Unable to produce JSON"
+      x-swagger-router-controller: "swagger_server.controllers.dataset_controller"
+securityDefinitions:
+  datasetstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://datasetstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:datasets: "modify datasets in your account"
+      read:datasets: "read your datasets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  CurrencyDateInfo:
+    type: "object"
+    properties:
+      currencyName:
+        type: "string"
+      newestDate:
+        type: "string"
+      oldestDate:
+        type: "string"
+    xml:
+      name: "Order"
+  Table:
+    type: "object"
+    properties:
+      html:
+        type: "string"
+        description: "html table code"
+    example:
+      html: "html"
+  InlineImage:
+    type: "object"
+    properties:
+      imageText:
+        type: "string"
+        description: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAt0AAAHwCAYAAAB67dOHAAAABHNCSVQICAg..."
+    example:
+      imageText: "imageText"
+    xml:
+      name: "User"
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
+  inline_response_200:
+    properties:
+      imageurl:
+        type: "string"
+    example:
+      imageurl: "imageurl"
+  inline_response_200_1:
+    properties:
+      count:
+        type: "number"
+      mean:
+        type: "number"
+      std:
+        type: "number"
+      min:
+        type: "number"
+      25%:
+        type: "number"
+      50%:
+        type: "number"
+      75%:
+        type: "number"
+      max:
+        type: "number"
+    example:
+      std: 1.46581298050294517310021547018550336360931396484375
+      25%: 5.63737665663332876420099637471139430999755859375
+      min: 5.962133916683182377482808078639209270477294921875
+      max: 9.301444243932575517419536481611430644989013671875
+      mean: 6.02745618307040320615897144307382404804229736328125
+      75%: 7.061401241503109105224211816675961017608642578125
+      count: 0.80082819046101150206595775671303272247314453125
+      50%: 2.3021358869347654518833223846741020679473876953125
