@@ -4,7 +4,10 @@ from matplotlib.finance import candlestick_ohlc
 import pandas as pd
 import seaborn as sns
 
-def load(input_dir='../input'):
+input_dir='input'
+
+def load(input_dir=input_dir):
+    """ Load all currency files for visualization. """
     currencies = {}
 
     currencies['bitcoin'] = pd.read_csv('{}/bitcoin_price.csv'.format(input_dir),
@@ -94,10 +97,10 @@ def plot_correlation(type='spearman'):
     for ind, file_name in enumerate(files_to_use):
         currency_name = file_name.split('_')[0]
         if ind == 0:
-            df = pd.read_csv('../input/' + file_name, usecols=['Date', 'Close'], parse_dates=['Date'])
+            df = pd.read_csv('{}/{}'.format(input_dir, file_name), usecols=['Date', 'Close'], parse_dates=['Date'])
             df.columns = ["Date", currency_name]
         else:
-            temp_df = pd.read_csv('../input/' + file_name, usecols=['Date', 'Close'], parse_dates=['Date'])
+            temp_df = pd.read_csv('{}/{}'.format(input_dir, file_name), usecols=['Date', 'Close'], parse_dates=['Date'])
             temp_df.columns = ['Date', currency_name]
             df = pd.merge(df, temp_df, on='Date')
         cols_to_use.append(currency_name)
@@ -118,3 +121,5 @@ def plot_trend(currencies, coin_type='bitcoin', coin_feat=['Close']):
     plt.ylabel('Value(USD)')
     plt.title('{} Price - {}'.format(coin_feat, coin_type))
     plt.show()
+
+
