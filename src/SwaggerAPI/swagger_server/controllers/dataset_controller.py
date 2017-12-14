@@ -90,7 +90,7 @@ def dataset_get_stats_get():  # noqa: E501
 
     :rtype: InlineResponse200
     """
-    return 'do some magic!'
+    return 'Method Not Supported; Please use the currency selection POST request instead'
 
 
 def dataset_get_table_table_name_post(tableName):  # noqa: E501
@@ -127,7 +127,8 @@ def dataset_graph_correlation_correlation_type_post(correlationType):  # noqa: E
         return visuals.plot_correlation('pearson')
     elif corr_choice == 3:
         return visuals.plot_correlation('kendall')
-    return 'Error: The given number was not 1, 2, or 3'
+    return {"status": 400,
+            "message": 'Error: The given number was not 1, 2, or 3'}
 
 
 def dataset_graph_selection_graph_selection_post(graphSelection):  # noqa: E501
@@ -153,7 +154,8 @@ def dataset_graph_selection_graph_selection_post(graphSelection):  # noqa: E501
             return visuals.plot_correlation('pearson')
         elif corr_choice == 3:
             return visuals.plot_correlation('kendall')
-    return 'Error'
+    return {"status": 400,
+            "message": 'Error: The given number was not 1, 2, or 3'}
 
 
 def dataset_model_type_model_type_post(modelType):  # noqa: E501
@@ -172,18 +174,23 @@ def dataset_model_type_model_type_post(modelType):  # noqa: E501
 
     if model_type == 1:
         model = models.LR(x_train, y_train, x_test, y_test, x_recent)
-        return print('Linear Regression model selected.\n')
+        return {"status": 200,
+                "message": 'OK: Linear Regression model selected'}
     elif model_type == 2:
         model = models.SVR(x_train, y_train, x_test, y_test, x_recent)
-        return print('Support Vector Regression model selected.\n')
+        return {"status": 200,
+                "message": 'OK: Support Vector Regression model selected'}
     elif model_type == 3:
         model = models.MLP(x_train, y_train, x_test, y_test, x_recent)
         model.build()
-        return print('Multilayer Perceptron model selected.\n')
+        return {"status": 200,
+                "message": 'OK: Multilayer Perceptron model selected'}
     elif model_type == 4:
         model = models.GBR(x_train, y_train, x_test, y_test, x_recent)
-        return print('Gradient Boosting Regression model selected.\n')
-    return 'Error'
+        return {"status": 200,
+                "message": 'OK: Gradient Boosting Regression model selected'}
+    return {"status": 400,
+            "message": 'Error: The given number was not 1, 2, 3, or 4'}
 
 
 def dataset_operation_type_operation_type_post(operationType):  # noqa: E501
@@ -219,17 +226,20 @@ def dataset_operation_type_operation_type_post(operationType):  # noqa: E501
     if operation_type == 1:
         print('Training initiated...\n')
         model.train()
-        return
+        return {"status": 200,
+                "message": 'OK'}
     elif operation_type == 2:
         print('Evaluating model on test data...\n')
         model.test()
-        return
+        return {"status": 200,
+                "message": 'OK'}
     elif operation_type == 3:
         print('Predicting future values...\n')
         preds = model.predict()
         print('Forecast Plot')
         return utils.forecast_plot(df, preds)
-    return 'Error'
+    return {"status": 400,
+            "message": 'Error: The given number was not 1, 2, or 3'}
 
 
 def dataset_train_currency_name_post(currencyName):  # noqa: E501
@@ -257,5 +267,5 @@ def dataset_train_currency_name_post(currencyName):  # noqa: E501
     print('Test sample shape: ', x_test.shape)
     print('Train label shape:', y_train.shape)
     print('Test label shape:', y_test.shape)
-    return {"Status": 200,
-            "Message": 'OK'}
+    return {"status": 200,
+            "message": 'OK'}
