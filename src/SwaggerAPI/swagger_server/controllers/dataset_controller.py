@@ -33,18 +33,17 @@ style.use('ggplot')
 plt.rcParams['figure.figsize'] = (12.0, 8.0)
 
 #Globals
-currencies = "UNDEFINED"
-coin_type = "UNDEFINED"
-coin_feat = "UNDEFINED"
-model = "UNDEFINED"
-x_train = "UNDEFINED"
-y_train = "UNDEFINED"
-x_test = "UNDEFINED"
-y_test = "UNDEFINED"
-x_recent = "UNDEFINED"
-name = "UNDEFINED"
-input_dir = "UNDEFINED"
-df = utils.load_data(input_dir, name)
+currencies = visuals.load()
+coin_type = 'bitcoin'
+coin_feat = ['Close']
+fileName = 'bitcoin_price.csv'
+input_dir = "src/input"
+df = utils.load_data(input_dir, fileName)
+graphType = 1
+corr_choice = 1
+model_type = 1
+operation_type = 1
+model, x_train, y_train, x_test, y_test, x_recent = utils.load_data(input_dir, fileName)
 
 def dataset_currency_selection_currency_name_post(currencyName):  # noqa: E501
     """Selects a specific currency type
@@ -56,31 +55,29 @@ def dataset_currency_selection_currency_name_post(currencyName):  # noqa: E501
 
     :rtype: ApiResponse
     """
-    print('Enter Currency File Name: ')
+    #print('Enter Currency File Name: ')
     # name = input()
-    global name
-    name = 'bitcoin_price.csv'
+    global fileName
+    fileName = 'bitcoin_price.csv'
+    global input_dir
 
-    x_train, x_test, x_recent, y_train, y_test, df = utils.load_data(input_dir, name)
+    global x_train, x_test, x_recent, y_train, y_test, df
+    x_train, x_test, x_recent, y_train, y_test, df = utils.load_data(input_dir, fileName)
 
-    def print_summary(x_train, x_test, x_recent, y_train, y_test, df):
-        print('=================================================')
-        print('Date of newest data: {}'.format(df.index[0]))
-        print('Date of oldest data: {}\n'.format(df.index[-1]))
+    summary = '================================================='
+    summary += 'Date of newest data: {}'.format(df.index[0])
+    summary += 'Date of oldest data: {}\n'.format(df.index[-1])
+    summary += x_train.shape[0], 'training samples.'
+    summary += x_test.shape[0], 'test samples.'
+    summary += 'Predicting {} days'.format(x_recent.shape[0])
+    summary += 'Train sample shape: ', x_train.shape
+    summary += 'Test sample shape: ', x_test.shape
+    summary += 'Train label shape:', y_train.shape
+    summary += 'Test label shape:', y_test.shape
+    summary += 'Sample Data: '
+    summary += df.describe()
 
-        # Dataset shapes
-        print(x_train.shape[0], 'training samples.')
-        print(x_test.shape[0], 'test samples.')
-        print('Predicting {} days'.format(x_recent.shape[0]))
-        print('Train sample shape: ', x_train.shape)
-        print('Test sample shape: ', x_test.shape)
-        print('Train label shape:', y_train.shape)
-        print('Test label shape:', y_test.shape)
-        # sample data statistics
-        print('Sample Data: ')
-        print(df.describe())
-
-    return print_summary(x_train, x_test, x_recent, y_train, y_test, df)
+    return summary
 
 
 def dataset_get_stats_get():  # noqa: E501
@@ -104,7 +101,7 @@ def dataset_get_table_table_name_post(tableName):  # noqa: E501
 
     :rtype: Table
     """
-    return 'do some magic!'
+    return currencies[tableName].head()
 
 
 def dataset_graph_correlation_correlation_type_post(correlationType):  # noqa: E501
@@ -117,23 +114,16 @@ def dataset_graph_correlation_correlation_type_post(correlationType):  # noqa: E
 
     :rtype: InlineImage
     """
-    #print('Choose Graph Type: [1]Trend Curve [2]Candlestick [3]Correlation Map')
-    global choice
-    choice = correlationType
-    if choice == 1:
-        visuals.plot_trend(currencies, coin_type, coin_feat)
-    elif choice == 2:
-        visuals.plot_candlestick(currencies, coin_type, coin_feat)
-    elif choice == 3:
-        print('Choose correlation type: [1]Spearman [2]Pearson [3]Kendall')
-        corr_choice = int(input())
-        if corr_choice == 1:
-            return visuals.plot_correlation('spearman')
-        elif corr_choice == 2:
-            return visuals.plot_correlation('pearson')
-        elif corr_choice == 3:
-            return visuals.plot_correlation('kendall')
-    return 'Error'
+
+    global corr_choice
+    corr_choice = correlationType
+    if corr_choice == 1:
+        return visuals.plot_correlation('spearman')
+    elif corr_choice == 2:
+        return visuals.plot_correlation('pearson')
+    elif corr_choice == 3:
+        return visuals.plot_correlation('kendall')
+    return 'Error: The given number was not 1, 2, or 3'
 
 
 def dataset_graph_selection_graph_selection_post(graphSelection):  # noqa: E501
@@ -146,15 +136,13 @@ def dataset_graph_selection_graph_selection_post(graphSelection):  # noqa: E501
 
     :rtype: ApiResponse
     """
-    global choice
-    choice = graphSelection
-    if choice == 1:
+    global graphType
+    graphType = graphSelection
+    if graphType == 1:
         visuals.plot_trend(currencies, coin_type, coin_feat)
-    elif choice == 2:
+    elif graphType == 2:
         visuals.plot_candlestick(currencies, coin_type, coin_feat)
-    elif choice == 3:
-        print('Choose correlation type: [1]Spearman [2]Pearson [3]Kendall')
-        corr_choice = int(input())
+    elif graphType == 3:
         if corr_choice == 1:
             return visuals.plot_correlation('spearman')
         elif corr_choice == 2:
@@ -174,22 +162,24 @@ def dataset_model_type_model_type_post(modelType):  # noqa: E501
 
     :rtype: ApiResponse
     """
-    choice = modelType
+    global model_Type
+    model_Type = modelType
+    global model
 
-    if choice == 1:
+    if model_Type == 1:
         model = models.LR(x_train, y_train, x_test, y_test, x_recent)
-        print('Linear Regression model selected.\n')
-    elif choice == 2:
+        return print('Linear Regression model selected.\n')
+    elif model_Type == 2:
         model = models.SVR(x_train, y_train, x_test, y_test, x_recent)
-        print('Support Vector Regression model selected.\n')
-    elif choice == 3:
+        return print('Support Vector Regression model selected.\n')
+    elif model_Type == 3:
         model = models.MLP(x_train, y_train, x_test, y_test, x_recent)
         model.build()
-        print('Multilayer Perceptron model selected.\n')
-    elif choice == 4:
+        return print('Multilayer Perceptron model selected.\n')
+    elif model_Type == 4:
         model = models.GTBR(x_train, y_train, x_test, y_test, x_recent)
-        print('Gradient Boosting Regression model selected.\n')
-    return 'do some magic!'
+        return print('Gradient Boosting Regression model selected.\n')
+    return 'Error'
 
 
 def dataset_operation_type_operation_type_post(operationType):  # noqa: E501
@@ -202,15 +192,18 @@ def dataset_operation_type_operation_type_post(operationType):  # noqa: E501
 
     :rtype: ApiResponse
     """
-    op = operationType
+    global operation_type
+    operation_type = operationType
 
-    if op == 1:
+    if operation_type == 1:
         print('Training initiated...\n')
         model.train()
-    elif op == 2:
+        return
+    elif operation_type == 2:
         print('Evaluating model on test data...\n')
         model.test()
-    elif op == 3:
+        return
+    elif operation_type == 3:
         print('Predicting future values...\n')
         preds = model.predict()
         print('Forecast Plot')
@@ -228,11 +221,13 @@ def dataset_train_currency_name_post(currencyName):  # noqa: E501
 
     :rtype: ApiResponse
     """
-    print('Enter Currency File Name: ')
+    #print('Enter Currency File Name: ')
     # name = input()
-    name = 'bitcoin_price.csv'
+    global fileName
+    fileName = currencyName+"_price.csv"
+    global x_train, x_test, x_recent, y_train, y_test, df
 
-    x_train, x_test, x_recent, y_train, y_test, df = utils.load_data(input_dir, name)
+    x_train, x_test, x_recent, y_train, y_test, df = utils.load_data(input_dir, fileName)
     print('---------------------------------------')
     print(x_train.shape[0], 'training samples.')
     print(x_test.shape[0], 'test samples.')
@@ -241,4 +236,4 @@ def dataset_train_currency_name_post(currencyName):  # noqa: E501
     print('Test sample shape: ', x_test.shape)
     print('Train label shape:', y_train.shape)
     print('Test label shape:', y_test.shape)
-    return 'do some magic!'
+    return 'Trained for currency'
