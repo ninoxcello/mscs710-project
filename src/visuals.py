@@ -4,7 +4,7 @@ from matplotlib.finance import candlestick_ohlc
 import pandas as pd
 import seaborn as sns
 
-input_dir='input'
+input_dir = '../input'
 
 def load(input_dir=input_dir):
     """ Load all currency files for visualization. """
