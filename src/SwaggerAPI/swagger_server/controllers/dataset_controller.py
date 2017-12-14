@@ -181,7 +181,7 @@ def dataset_model_type_model_type_post(modelType):  # noqa: E501
         model.build()
         return print('Multilayer Perceptron model selected.\n')
     elif model_Type == 4:
-        model = models.GTBR(x_train, y_train, x_test, y_test, x_recent)
+        model = models.GBR(x_train, y_train, x_test, y_test, x_recent)
         return print('Gradient Boosting Regression model selected.\n')
     return 'Error'
 
