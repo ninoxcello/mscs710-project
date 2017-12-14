@@ -4,7 +4,7 @@ info:
   description: "This is an Itty Bitty Money server.  \n"
   version: "1.0.2"
   title: "Money Rest Client"
-host: "virtserver.swaggerhub.com"
+host: "localhost:8080"
 basePath: "/mmaffa/MoneyREST/1.0.2"
 tags:
 - name: "dataset"

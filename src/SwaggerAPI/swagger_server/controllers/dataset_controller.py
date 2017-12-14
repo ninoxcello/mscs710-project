@@ -58,25 +58,27 @@ def dataset_currency_selection_currency_name_post(currencyName):  # noqa: E501
     #print('Enter Currency File Name: ')
     # name = input()
     global fileName
-    fileName = 'bitcoin_price.csv'
+    fileName = currencyName + '_price.csv'
     global input_dir
 
     global x_train, x_test, x_recent, y_train, y_test, df
     x_train, x_test, x_recent, y_train, y_test, df = utils.load_data(input_dir, fileName)
 
-    summary = '================================================='
+    print('Building Summary...')
+
+    summary = ''
     summary += 'Date of newest data: {}'.format(df.index[0])
     summary += 'Date of oldest data: {}\n'.format(df.index[-1])
-    summary += x_train.shape[0], 'training samples.'
-    summary += x_test.shape[0], 'test samples.'
+    summary += str(x_train.shape[0]) + 'training samples.'
+    summary += str(x_test.shape[0]) + 'test samples.'
     summary += 'Predicting {} days'.format(x_recent.shape[0])
-    summary += 'Train sample shape: ', x_train.shape
-    summary += 'Test sample shape: ', x_test.shape
-    summary += 'Train label shape:', y_train.shape
-    summary += 'Test label shape:', y_test.shape
+    summary += 'Train sample shape: ' + str(x_train.shape)
+    summary += 'Test sample shape: ' + str(x_test.shape)
+    summary += 'Train label shape:' + str(y_train.shape)
+    summary += 'Test label shape:' + str(y_test.shape)
     summary += 'Sample Data: '
-    summary += df.describe()
-
+    summary += str(df.describe())
+    print('Successfully executed method')
     return summary
 
 
@@ -101,7 +103,9 @@ def dataset_get_table_table_name_post(tableName):  # noqa: E501
 
     :rtype: Table
     """
-    return currencies[tableName].head()
+
+    print(currencies[tableName].head())
+    return str(currencies[tableName].head())
 
 
 def dataset_graph_correlation_correlation_type_post(correlationType):  # noqa: E501
