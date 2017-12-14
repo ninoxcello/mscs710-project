@@ -166,21 +166,21 @@ def dataset_model_type_model_type_post(modelType):  # noqa: E501
 
     :rtype: ApiResponse
     """
-    global model_Type
-    model_Type = modelType
+    global model_type
+    model_type = modelType
     global model
 
-    if model_Type == 1:
+    if model_type == 1:
         model = models.LR(x_train, y_train, x_test, y_test, x_recent)
         return print('Linear Regression model selected.\n')
-    elif model_Type == 2:
+    elif model_type == 2:
         model = models.SVR(x_train, y_train, x_test, y_test, x_recent)
         return print('Support Vector Regression model selected.\n')
-    elif model_Type == 3:
+    elif model_type == 3:
         model = models.MLP(x_train, y_train, x_test, y_test, x_recent)
         model.build()
         return print('Multilayer Perceptron model selected.\n')
-    elif model_Type == 4:
+    elif model_type == 4:
         model = models.GBR(x_train, y_train, x_test, y_test, x_recent)
         return print('Gradient Boosting Regression model selected.\n')
     return 'Error'
@@ -198,6 +198,23 @@ def dataset_operation_type_operation_type_post(operationType):  # noqa: E501
     """
     global operation_type
     operation_type = operationType
+
+    global model
+
+
+    if model_type == 1:
+        model = models.LR(x_train, y_train, x_test, y_test, x_recent)
+        print('Linear Regression model selected.\n')
+    elif model_type == 2:
+        model = models.SVR(x_train, y_train, x_test, y_test, x_recent)
+        print('Support Vector Regression model selected.\n')
+    elif model_type == 3:
+        model = models.MLP(x_train, y_train, x_test, y_test, x_recent)
+        model.build()
+        print('Multilayer Perceptron model selected.\n')
+    elif model_type == 4:
+        model = models.GBR(x_train, y_train, x_test, y_test, x_recent)
+        print('Gradient Boosting Regression model selected.\n')
 
     if operation_type == 1:
         print('Training initiated...\n')
@@ -240,4 +257,5 @@ def dataset_train_currency_name_post(currencyName):  # noqa: E501
     print('Test sample shape: ', x_test.shape)
     print('Train label shape:', y_train.shape)
     print('Test label shape:', y_test.shape)
-    return 'Trained for currency'
+    return {"Status": 200,
+            "Message": 'OK'}
