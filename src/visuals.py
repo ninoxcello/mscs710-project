@@ -1,13 +1,27 @@
+"""
+Author: Patrick Handley
+Description: Helper functions for visualization.
+Ex: loading data for visuals, line graph plot, candlestick chart, correlation maps.
+"""
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.finance import candlestick_ohlc
 import pandas as pd
 import seaborn as sns
 
-input_dir = '../input'
+input_dir='../input'
 
 def load(input_dir=input_dir):
-    """ Load all currency files for visualization. """
+    """
+    Load all currency files for visualization.
+
+    Args:
+        input_dir: path to dir containing all csv files
+
+    Returns:
+        Dict containing all currency dataframes
+    """
+
     currencies = {}
 
     currencies['bitcoin'] = pd.read_csv('{}/bitcoin_price.csv'.format(input_dir),
@@ -59,6 +73,7 @@ def load(input_dir=input_dir):
 
 
 def plot_candlestick(currencies, coin_type='bitcoin', coin_feat=['Close']):
+    """ plot candlestick chart for given currency and feature """
     ohlc = currencies[coin_type][coin_feat].resample('10D').ohlc()
     ohlc.reset_index(inplace=True)
     ohlc['Date'] = ohlc['Date'].map(mdates.date2num)
@@ -76,6 +91,7 @@ def plot_candlestick(currencies, coin_type='bitcoin', coin_feat=['Close']):
 
 
 def plot_correlation(type='spearman'):
+    """ plot correlation maps for given correlation type """
     files_to_use = [
         'bitcoin_price.csv',
         'bitconnect_price.csv',
@@ -115,6 +131,7 @@ def plot_correlation(type='spearman'):
 
 
 def plot_trend(currencies, coin_type='bitcoin', coin_feat=['Close']):
+    """ plot simple linear trend curve """
     plt.plot(currencies[coin_type][coin_feat])
     plt.legend(bbox_to_anchor=(1.01, 1))
     plt.xlabel('Time(Yr-M)')

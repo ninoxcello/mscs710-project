@@ -1,5 +1,9 @@
+"""
+Author: Patrick Handley
+Description: Helper functions. Ex: loading data, plotting forecast trend
+"""
+
 import datetime
-import math
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -7,6 +11,22 @@ from sklearn import preprocessing, cross_validation
 
 
 def load_data(input_dir, file_name, forecast_col='Close'):
+    """
+    Reading data csv file and split into train and test set by 80/20 ratio.
+
+    Args:
+        input_dir: path to directory containing data csv files.
+        file_name: name of currency file to be used.
+        forecast_col: feature to be used as target.
+
+    Returns:
+        x_train: training samples.
+        y_train: training labels.
+        x_test: test samples.
+        y_test: test labels.
+        x_recent: subset used for prediction
+        df: pandas dataframe for currency
+    """
     # read in csv
     df = pd.read_csv('{}/{}'.format(input_dir, file_name), parse_dates=['Date'], index_col=0)
     # select & add feature columns
@@ -22,16 +42,17 @@ def load_data(input_dir, file_name, forecast_col='Close'):
     # set up feature & label matrices
     X = np.array(df.drop(['label'], 1))
     X = preprocessing.scale(X)
-    X_lately = X[-days_forecast:]
+    x_recent = X[-days_forecast:]
     X = X[:-days_forecast]
     df.dropna(inplace=True)
     y = np.array(df['label'])
     # split data 80/20 for train & test respectively
-    X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.2)
-    return X_train, X_test, X_lately, y_train, y_test, df
+    x_train, x_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.2)
+    return x_train, x_test, x_recent, y_train, y_test, df
 
 
 def forecast_plot(df, predictions):
+    """ show plot of historical values as well as prediction values. """
     df['Forecast'] = np.nan
 
     last_date = df.iloc[-1].name
