@@ -1,0 +1,5 @@
+You need to have python on your computer. I have included a python installation with the required packages in the top level, and I recommend utilizing it so that you don't have to install the packages manually. 
+
+Under src\SwaggerAPI\swagger_server\controllers\dataset_controller.py, change line 13 to match the directory where this project's src folder is located on your computer. 
+
+In command prompt/bash, navigate to \src\SwaggerAPI and run "python -m swagger_server". After the server starts, navigate to localhost:8080/mmaffa/MoneyREST/1.0.2/ui/ in your browser. You can use the UI on this webpage as I updated the endpoint to the server itself, so doing the "try it now" actually runs the requests on the server itself. 
